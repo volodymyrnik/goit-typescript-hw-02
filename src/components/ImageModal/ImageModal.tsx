@@ -1,9 +1,24 @@
 import React from "react";
 import Modal from "react-modal";
-Modal.setAppElement("#root");
 import css from "./ImageModal.module.css";
 
-export default function ImageModal({ onClose, photo }) {
+Modal.setAppElement("#root");
+
+interface ImageModalProps {
+  onClose: () => void;
+  photo: {
+    urls: {
+      regular: string;
+    };
+    description?: string;
+    likes: number;
+    user: {
+      name: string;
+    };
+  } | null;
+}
+
+export default function ImageModal({ onClose, photo }: ImageModalProps) {
   const isOpen = Boolean(photo);
   return (
     <Modal
@@ -20,7 +35,7 @@ export default function ImageModal({ onClose, photo }) {
           <img
             className={css.modalImage}
             src={photo.urls.regular}
-            alt={photo.description}
+            alt={photo.description || "Image"}
           />
           <p className={css.text}>Likes: {photo.likes}</p>
           <p className={css.text}>Description: {photo.description}</p>

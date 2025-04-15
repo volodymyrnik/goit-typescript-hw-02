@@ -1,12 +1,30 @@
 import css from "./ImageCard.module.css";
 
-export default function ImageCard({ photo, onClick }) {
+interface Photo {
+  id: string;
+  urls: {
+    small: string;
+  };
+  description?: string;
+  likes: number;
+  user: {
+    name: string;
+    location?: string;
+  };
+}
+
+interface ImageCardProps {
+  photo: Photo;
+  onClick: (photo: Photo) => void;
+}
+
+export default function ImageCard({ photo, onClick }: ImageCardProps) {
   return (
     <div className={css.card} onClick={() => onClick(photo)}>
       <img
         className={css.galleryImg}
         src={photo.urls.small}
-        alt={photo.description}
+        alt={photo.description || "Image"}
       />
       <div className={css.info}>
         <div className={css.infoList}>
@@ -23,7 +41,7 @@ export default function ImageCard({ photo, onClick }) {
         </div>
         <div className={css.infoList}>
           <span className={css.infoItem}>Location:</span>
-          <span className={css.infoItemValue}>{photo.user.location}</span>
+          <span className={css.infoItemValue}>{photo.user.location || "Unknown"}</span>
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { Photo } from "./App";
 
-async function fetchPhoto(searchPhoto, currentPage) {
+async function fetchPhoto(searchPhoto: string, currentPage: number): Promise<Photo[]> {
   try {
     const response = await axios.get("https://api.unsplash.com/search/photos", {
       params: {
@@ -17,4 +18,5 @@ async function fetchPhoto(searchPhoto, currentPage) {
     return [];
   }
 }
+
 export default fetchPhoto;

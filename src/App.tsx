@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import "./App.css";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,26 +7,35 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Spinner from "./components/Loader/Loader";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-
 import ImageModal from "./components/ImageModal/ImageModal";
 
+// Тип для фото
+export interface Photo {
+  id: string;
+  alt_description: string;
+  urls: {
+    small: string;
+    regular: string;
+  };
+}
+
 function App() {
-  const [photos, setPhotos] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [page, setPage] = useState(1);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [selectPhoto, setSelectPhoto] = useState<Photo | null>(null);
 
-  const [selectPhoto, setSelectPhoto] = useState(null);
-
-  function openModal(photo) {
+  function openModal(photo: Photo) {
     setSelectPhoto(photo);
   }
 
   function closeModal() {
     setSelectPhoto(null);
   }
-  const handleSubmit = (term) => {
+
+  const handleSubmit = (term: string) => {
     if (!term.trim()) {
       toast.error("Please enter a search term!");
       return;
@@ -38,9 +46,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (!searchTerm) {
-      return;
-    }
+    if (!searchTerm) return;
 
     const fetchImages = async () => {
       try {
@@ -51,10 +57,10 @@ function App() {
           toast.error("No images found!");
           return;
         }
-        setPhotos((prevImages) => {
-          return page === 1 ? images : [...prevImages, ...images];
-        });
-      } catch {
+        setPhotos((prevImages) =>
+          page === 1 ? images : [...prevImages, ...images]
+        );
+      } catch (error) {
         setError(true);
         toast.error("Error! Please, reload page!");
       } finally {
@@ -77,7 +83,6 @@ function App() {
           Load more {page}
         </LoadMoreBtn>
       )}
-
       <ImageModal onClose={closeModal} photo={selectPhoto} />
     </div>
   );
